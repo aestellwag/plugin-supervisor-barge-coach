@@ -19,9 +19,28 @@ const buttonStyle = {
 
 class SupervisorBargeButton extends React.Component {
   state = {
-    muted: false
+    muted: true,
+    enableBargeinButton: false
   }
-  
+
+  componentDidMount() {
+
+    // Added a listening for when the supervisor hits the monitor call button
+    // that it will enable the barge-in button, and on the reverse
+    // once they unmonitor the call, it will disable the barge-in button
+
+    Actions.addListener('afterMonitorCall', (payload) => {
+      console.log(`Monitor button triggered, enable the Barge-in Button`);
+      //this.setState({ enableBargeinButton: true });
+      this.state.enableBargeinButton = true;
+    })
+    Actions.addListener('afterStopMonitoringCall', (payload) => {
+      console.log(`Unmonitor button triggered, disable the Barge-in Button`);
+      //this.setState({ enableBargeinButton: false });
+      this.state.enableBargeinButton = false; 
+    })
+  }
+
   // On click we will be pulling the conference SID and supervisorSID
   // to trigger Mute / Unmute respectively for that user
   // We've built in resiliency if the supervisor refreshes their browser
@@ -32,7 +51,7 @@ class SupervisorBargeButton extends React.Component {
     const { task } = this.props;
     const conference = task && task.conference;
     const conferenceSid = conference && conference.conferenceSid;
-    const { supervisorCallSid, muted } = this.state;
+    const { muted } = this.state;
     const conferenceChildren = conference?.source?.children || [];
 
     // Checking the conference within the task for a participant with the value "supervisor", 
@@ -48,12 +67,10 @@ class SupervisorBargeButton extends React.Component {
 
     // Barge-in will "unmute" their line if the are muted, else "mute" their line if they are unmuted
     if (muted) {
-      console.log(`Supervisor SID = ${supervisorCallSid}`);
       ConferenceService.unmuteParticipant(conferenceSid, supervisorParticipant.key);
       this.setState({ muted: false });
     } else {
       ConferenceService.muteParticipant(conferenceSid, supervisorParticipant.key);
-      console.log(`Supervisor SID = ${supervisorCallSid}`);
       this.setState({ muted: true });
     }
   }
@@ -62,13 +79,14 @@ class SupervisorBargeButton extends React.Component {
   // to make this easier to see when they are unmuted.  Thinking a border when it is on (maybe green?)
   // Look to enhance this once you have it working!
   render() {
+    const { muted, enableBargeinButton } = this.state;
     const isLiveCall = TaskHelper.isLiveCall(this.props.task);
 
     return (
       <ButtonContainer>
         <IconButton
-          icon="Supervisor"
-          disabled={!isLiveCall}
+          icon={ muted ? `MuteLargeBold` : `MuteLarge`}
+          disabled={!isLiveCall || !enableBargeinButton}
           onClick={this.handleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
           title="Barge-in"
