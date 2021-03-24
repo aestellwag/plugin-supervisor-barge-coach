@@ -1,8 +1,8 @@
 [
   {
-    "name": "SupervisorBargePlugin",
+    "name": "SupervisorBargeCoachPlugin",
     "version": "0.0.0",
-    "class": "SupervisorBargePlugin",
+    "class": "SupervisorBargeCoachPlugin",
     "requires": [
       {
         "@twilio/flex-ui": "^1"

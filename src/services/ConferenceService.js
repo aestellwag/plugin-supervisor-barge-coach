@@ -6,8 +6,8 @@ class ConferenceService {
   manager = Manager.getInstance();
 
   // We are calling the mute-unmute-participant Twilio function
-  // pasisng the conferenceSID, the participantSID, and 
-  // Flip them from mute/unmute respectively when clicking the button
+  // passing the conferenceSID, the participantSID, and 
+  // flip them from mute/unmute respectively when clicking the button
   _toggleParticipantMute = (conference, participantSid, muted) => {
     
     return new Promise((resolve, reject) => {
@@ -33,6 +33,37 @@ class ConferenceService {
   // Calling to toggle mute status to false (unmute)
   unmuteParticipant = (conference, participantSid) => {
     return this._toggleParticipantMute(conference, participantSid, false);
+  }
+
+  // We are calling the coaching Twilio function
+  // passing the conferenceSID, the participantSID, and 
+  // flip them from disable/enable coaching respectively when clicking the button
+  _toggleParticipantCoaching = (conference, participantSid, coaching, agentSid) => {
+    console.log(`Passing conference: ${conference}, supervisor: ${participantSid}, and agent: ${agentSid} to the coaching Twilio funciton as ${coaching}`);
+    return new Promise((resolve, reject) => {
+      request('coaching', this.manager, {
+        conference,
+        participant: participantSid,
+        coaching,
+        agentSid
+      }).then(response => {
+        console.log(`${coaching ? 'Enabling Coach' : 'Disabling Coach'} successful for participant`, participantSid);
+        resolve();
+      }).catch(error => {
+        console.error(`Error ${coaching ? 'Enabling Coach' : 'Disabling Coach'} participant ${participantSid}\r\n`, error);
+        reject(error);
+      });
+    });
+  }
+
+  // Calling to toggle coaching status to true (enable coaching)
+  enableCoaching = (conference, participantSid, agentSid) => {
+    return this._toggleParticipantCoaching(conference, participantSid, true, agentSid);
+  }
+
+  // Calling to toggle coaching status to false (disable coaching)
+  disableCoaching = (conference, participantSid, agentSid) => {
+    return this._toggleParticipantCoaching(conference, participantSid, false, agentSid);
   }
 }
 

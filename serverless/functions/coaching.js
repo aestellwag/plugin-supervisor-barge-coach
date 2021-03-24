@@ -19,14 +19,15 @@ exports.handler = TokenValidator(async (context, event, callback) => {
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type'); 
 
 
-  // Passed in conference SID, Participant SID we are changing, and if we are muting or unmuting
+  // Passed in conference SID, Participant SID we are changing, and if we are enabling or disabling coaching
   const {
     conference,
     participant,
-    muted
+    coaching,
+    agentSid
   } = event;
     
-  console.log(`Updating participant ${participant} in conference ${conference}, toggling the mute status to ${muted}`);
+  console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching}`);
   
   const client = context.getTwilioClient();
 
@@ -36,10 +37,15 @@ exports.handler = TokenValidator(async (context, event, callback) => {
     participantResponse = await client
       .conferences(conference)
       .participants(participant)
-      .update({muted})
+      .update(
+        {Coaching: coaching},
+        {CallSidToCoach: agentSid}
+      )
+    console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching} for agent ${agentSid}`);
   } catch (error){
     console.error(error);
   }
+  
   console.log('Participant response properties:');
   
   response.setBody({

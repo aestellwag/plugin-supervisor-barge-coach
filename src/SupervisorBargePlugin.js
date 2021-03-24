@@ -3,10 +3,12 @@ import React from 'react';
 
 //import for the supervisor barge button component
 import SupervisorBargeButton from './components/SupervisorBargeButton';
+//import for the supervisor coach button component
+import SupervisorCoachButton from './components/SupervisorCoachButton';
 
-const PLUGIN_NAME = 'SupervisorBargePlugin';
+const PLUGIN_NAME = 'SupervisorBargeCoachPlugin';
 
-export default class SupervisorBargePlugin extends FlexPlugin {
+export default class SupervisorBargeCoachPlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }
@@ -23,5 +25,8 @@ export default class SupervisorBargePlugin extends FlexPlugin {
     //Add the Barge Option
     flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeButton key="barge-button" />);
     
+    //Add the Coach Option
+    flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorCoachButton key="coach-button" />);
+
   } //end init
 } //end SupervisorBargePlugin
