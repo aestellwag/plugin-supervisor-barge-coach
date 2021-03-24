@@ -21,7 +21,6 @@ npm install
 ```
 *You should now be in the plugins directory
 
-
 ```
 Run: 
 cd public/resources
@@ -34,9 +33,7 @@ cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
 AUTH_TOKEN= Found at https://www.twilio.com/console
-TWILIO_WORKFLOW_SID=    ??Is this needed, need to clean up
-TWILIO_WORKSPACE_SID=   ??Is this needed, need to clean up
-TWILIO_NUMBER=          ??Is this needed, need to clean up
+TWILIO_WORKFLOW_SID= 
 ```
 
 ```
@@ -50,10 +47,17 @@ twilio serveless:deploy --assets
 ```
 *Do this if you haven't deployed the serverless functions already*
 
+```
+Run: 
+From the root plugin directory rename the .env.example file to .env and change the below:
+REACT_APP_SERVICE_BASE_URL = Points to the Twilio Function Service URL (example: https://serverless-XXXX-dev.twil.io)
+
+Can find it by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
+```
 
 ## Development
 
-In order to develop locally, you can use the Webpack Dev Server by running:
+In order to develop locally, you can use the Webpack Dev Server by running (from the root plugin directory):
 
 ```
 Run: 
