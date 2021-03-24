@@ -8,8 +8,6 @@ It is assumed you have the Flex Plugins CLI but if you do not please follow the 
 
 [Flex CLI Plugin Install](https://www.twilio.com/docs/flex/developer/plugins/cli/install)
 
-Configure your Workspace to prepare fo the voicemail/callback piece of this plugin - reference: https://www.twilio.com/docs/flex/solutions-library/queued-callback-and-voicemail - Specificially the "Conifgure your Flex Workspace"
-
 ## Setup
 
 Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
