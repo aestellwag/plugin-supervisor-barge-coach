@@ -50,9 +50,13 @@ twilio serveless:deploy --assets
 ```
 Run: 
 From the root plugin directory rename the .env.example file to .env and change the below:
-REACT_APP_SERVICE_BASE_URL = Points to the Twilio Function Service URL (example: https://serverless-XXXX-dev.twil.io)
+REACT_APP_SERVICE_BASE_URL = 
+Points to the Twilio Function Service URL (example: https://serverless-XXXX-dev.twil.io)
 
-Can find it by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
+Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
+
+REACT_APP_TASK-CHANNEL_SID =
+Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
 ```
 
 ## Development
