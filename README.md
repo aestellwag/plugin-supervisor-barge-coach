@@ -20,17 +20,10 @@ npm install
 
 ```
 Run: 
-cd public/resources
-***rename the .env.example file to .env and change the TWILIO_WORKSPACE_SID=Your Flex Task Assignment SID
-```
-
-```
-Run: 
 cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
-AUTH_TOKEN= Found at https://www.twilio.com/console
-TWILIO_WORKFLOW_SID= 
+AUTH_TOKEN= Found at https://www.twilio.com/console 
 ```
 
 ```
