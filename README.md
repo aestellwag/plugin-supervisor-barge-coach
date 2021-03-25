@@ -39,6 +39,8 @@ twilio plugins:install @twilio-labs/plugin-serverless
 ```
 Run: 
 twilio serverless:deploy
+
+copy the domain as you'll need this for the .env in the next step
 ```
       *Do this if you haven't deployed the serverless functions already*
 
@@ -52,6 +54,14 @@ Can be found by by going to https://www.twilio.com/console/functions/overview/se
 
 REACT_APP_TASK-CHANNEL_SID =
 Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
+```
+
+```
+Run: 
+cd ..
+cd public
+(Navigate to the public folder found in the root directory):
+rename appConfig.example.js to appConfig.js
 ```
 
 ## Development
