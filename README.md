@@ -17,7 +17,6 @@ From the plugin directory
 Run: 
 npm install
 ```
-*You should now be in the plugins directory
 
 ```
 Run: 
