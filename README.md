@@ -33,6 +33,11 @@ npm install
 
 ```
 Run: 
+twilio plugins:install &twilio-labs/plugin-serverless
+```
+
+```
+Run: 
 twilio serveless:deploy --assets
 ```
 *Do this if you haven't deployed the serverless functions already*
