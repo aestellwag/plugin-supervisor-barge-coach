@@ -40,7 +40,7 @@ twilio plugins:install @twilio-labs/plugin-serverless
 Run: 
 twilio serverless:deploy
 ```
-*Do this if you haven't deployed the serverless functions already*
+      *Do this if you haven't deployed the serverless functions already*
 
 ```
 Run: 
