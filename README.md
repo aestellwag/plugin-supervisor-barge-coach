@@ -45,12 +45,12 @@ copy the domain as you'll need this for the .env in the next step
       *Do this if you haven't deployed the serverless functions already*
 
 ```
-Run: 
 From the root plugin directory rename the .env.example file to .env and change the below:
+
 REACT_APP_SERVICE_BASE_URL = 
 Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
 
-Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
+Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on barge-coach (should look like barge-coach-XXXX-dev.twil.io)
 
 REACT_APP_TASK-CHANNEL_SID =
 Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
