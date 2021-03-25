@@ -27,7 +27,7 @@ AUTH_TOKEN= Found at https://www.twilio.com/console
 ```
 
 ```
-Run: 
+Run: (from the serverless directory)
 npm install
 ```
 
