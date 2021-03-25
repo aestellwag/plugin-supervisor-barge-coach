@@ -33,7 +33,7 @@ npm install
 
 ```
 Run: 
-twilio plugins:install &twilio-labs/plugin-serverless
+twilio plugins:install @twilio-labs/plugin-serverless
 ```
 
 ```
