@@ -62,6 +62,8 @@ cd ..
 cd public
 (Navigate to the public folder found in the root directory):
 rename appConfig.example.js to appConfig.js
+
+change serviceBaseUrl: "https://supervisor-barge-coach-XXXX.twil.io"
 ```
 
 ## Development
