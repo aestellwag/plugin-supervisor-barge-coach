@@ -38,7 +38,7 @@ twilio plugins:install @twilio-labs/plugin-serverless
 
 ```
 Run: 
-twilio serveless:deploy --assets
+twilio serverless:deploy
 ```
 *Do this if you haven't deployed the serverless functions already*
 
@@ -46,7 +46,7 @@ twilio serveless:deploy --assets
 Run: 
 From the root plugin directory rename the .env.example file to .env and change the below:
 REACT_APP_SERVICE_BASE_URL = 
-Points to the Twilio Function Service URL (example: https://serverless-XXXX-dev.twil.io)
+Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
 
 Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
 
