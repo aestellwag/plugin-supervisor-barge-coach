@@ -23,11 +23,7 @@ Run:
 cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
-<<<<<<< HEAD
-AUTH_TOKEN= Found at https://www.twilio.com/console
-=======
 AUTH_TOKEN= Found at https://www.twilio.com/console 
->>>>>>> 2bea3592ebfe4b56c931a0a76cf570b83481f9b7
 ```
 
 ```
@@ -37,27 +33,8 @@ npm install
 
 ```
 Run: 
-<<<<<<< HEAD
-twilio plugins:install &twilio-labs/plugin-serverless
-```
-
-```
-Run: 
-twilio serveless:deploy --assets
-=======
 twilio plugins:install @twilio-labs/plugin-serverless
->>>>>>> 2bea3592ebfe4b56c931a0a76cf570b83481f9b7
 ```
-
-
-```
-Run: 
-cd ..
-cd public
-(Navigate to the public folder found in the root directory):
-rename appConfig.example.js to appConfig.js
-```
-
 
 ```
 Run: 
