@@ -23,7 +23,11 @@ Run:
 cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
+<<<<<<< HEAD
 AUTH_TOKEN= Found at https://www.twilio.com/console
+=======
+AUTH_TOKEN= Found at https://www.twilio.com/console 
+>>>>>>> 2bea3592ebfe4b56c931a0a76cf570b83481f9b7
 ```
 
 ```
@@ -33,14 +37,17 @@ npm install
 
 ```
 Run: 
+<<<<<<< HEAD
 twilio plugins:install &twilio-labs/plugin-serverless
 ```
 
 ```
 Run: 
 twilio serveless:deploy --assets
+=======
+twilio plugins:install @twilio-labs/plugin-serverless
+>>>>>>> 2bea3592ebfe4b56c931a0a76cf570b83481f9b7
 ```
-*Do this if you haven't deployed the serverless functions already*
 
 
 ```
@@ -54,14 +61,32 @@ rename appConfig.example.js to appConfig.js
 
 ```
 Run: 
+twilio serverless:deploy
+
+copy the domain as you'll need this for the .env in the next step
+```
+      *Do this if you haven't deployed the serverless functions already*
+
+```
 From the root plugin directory rename the .env.example file to .env and change the below:
+
 REACT_APP_SERVICE_BASE_URL = 
 Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
 
-Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
+Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on barge-coach (should look like barge-coach-XXXX-dev.twil.io)
 
 REACT_APP_TASK-CHANNEL_SID =
 Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
+```
+
+```
+Run: 
+cd ..
+cd public
+(Navigate to the public folder found in the root directory):
+rename appConfig.example.js to appConfig.js
+
+change serviceBaseUrl: "https://supervisor-barge-coach-XXXX.twil.io"
 ```
 
 ## Development
