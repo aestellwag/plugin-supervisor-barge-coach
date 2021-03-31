@@ -28,16 +28,20 @@ class SupervisorBargeButton extends React.Component {
     // Added a listening for when the supervisor hits the monitor call button
     // that it will enable the barge-in button, and on the reverse
     // once they unmonitor the call, it will disable the barge-in button
-
+    // In both cases we set Mute to True to reset the muted stat
     Actions.addListener('afterMonitorCall', (payload) => {
       console.log(`Monitor button triggered, enable the Barge-in Button`);
-      //this.setState({ enableBargeinButton: true });
-      this.state.enableBargeinButton = true;
+      this.setState({ enableBargeinButton: true });
+      this.setState({ muted: true });
+      //this.state.enableBargeinButton = true;
+      //this.state.muted = true;
     })
     Actions.addListener('afterStopMonitoringCall', (payload) => {
       console.log(`Unmonitor button triggered, disable the Barge-in Button`);
-      //this.setState({ enableBargeinButton: false });
-      this.state.enableBargeinButton = false; 
+      this.setState({ enableBargeinButton: false });
+      this.setState({ muted: true });
+      //this.state.enableBargeinButton = false;
+      //this.state.muted = true;
     })
   }
 
@@ -46,7 +50,6 @@ class SupervisorBargeButton extends React.Component {
   // We've built in resiliency if the supervisor refreshes their browser
   // or clicks monitor/un-monitor multiple times, it still confirms that
   // we allow the correct user to barge-in on the call
-
   handleClick = () => {
     const { task } = this.props;
     const conference = task && task.conference;
@@ -59,7 +62,6 @@ class SupervisorBargeButton extends React.Component {
     // it creates an additional participant, the previous status will show as "left", we only want the active supervisor, 
     // and finally we want to ensure that the supervisor that is joined also matches their worker_sid 
     // which we pull from mapStateToProps at the bottom of this js file
-
     const supervisorParticipant = conferenceChildren.find(p => p.value.participant_type === 'supervisor' 
       && p.value.status === 'joined' 
       && this.props.myWorkerSID === p.value.worker_sid);
@@ -90,6 +92,7 @@ class SupervisorBargeButton extends React.Component {
           themeOverride={this.props.theme.CallCanvas.Button}
           title="Barge-in"
           style={buttonStyle}
+          color={ muted ? 'White' : `Red`}
         />
       </ButtonContainer>
     )

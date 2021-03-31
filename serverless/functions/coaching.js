@@ -19,29 +19,42 @@ exports.handler = TokenValidator(async (context, event, callback) => {
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type'); 
 
 
-  // Passed in conference SID, Participant SID we are changing, and if we are enabling or disabling coaching
+  // Passed in conference SID, Participant SID we are changing, muted status, and if we are enabling or disabling coaching
   const {
     conference,
     participant,
+    muted,
     coaching,
     agentSid
   } = event;
-    
-  console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching}`);
   
   const client = context.getTwilioClient();
 
-  // updating the muted status based on what is passed from the plugin
+  // We first have to toggle the Coaching status to true/false and pass in the agent sid we are coaching
   let participantResponse;
   try {
     participantResponse = await client
       .conferences(conference)
       .participants(participant)
       .update(
-        {Coaching: coaching},
-        {CallSidToCoach: agentSid}
-      )
-    console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching} for agent ${agentSid}`);
+        { 
+          coaching: coaching,
+          callSidToCoach: agentSid
+        }
+      )  
+    console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching} - agent we are coaching ${agentSid}`)  
+  } catch (error){
+    console.error(error);
+  }
+  // Once we have set the coaching status, we can now unmute our line
+  try {
+    participantResponse = await client
+      .conferences(conference)
+      .participants(participant)
+      .update(
+        { muted: muted }
+      )  
+    console.log(`Setting Mute to ${muted}.`);  
   } catch (error){
     console.error(error);
   }

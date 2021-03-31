@@ -28,15 +28,18 @@ class SupervisorCoachButton extends React.Component {
     // Added a listening for when the supervisor hits the monitor call button
     // that it will enable the barge-in button, and on the reverse
     // once they unmonitor the call, it will disable the barge-in button
+    // In both cases we set coaching to false to reset the state
     Actions.addListener('afterMonitorCall', (payload) => {
       console.log(`Monitor button triggered, enable the Coach Button`);
-      //this.setState({ enableBargeinButton: true });
-      this.state.enableCoachButton = true;
+      this.setState({ enableCoachButton: true });
+      this.setState({ coaching: false });
+      //this.state.enableCoachButton = true;
     })
     Actions.addListener('afterStopMonitoringCall', (payload) => {
       console.log(`Unmonitor button triggered, disable the Coach Button`);
-      //this.setState({ enableBargeinButton: false });
-      this.state.enableCoachButton = false; 
+      this.setState({ enableCoachButton: false });
+      this.setState({ coaching: false });
+      //this.state.enableCoachButton = false; 
     })
   }
 

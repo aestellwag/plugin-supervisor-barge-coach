@@ -17,13 +17,6 @@ From the plugin directory
 Run: 
 npm install
 ```
-*You should now be in the plugins directory
-
-```
-Run: 
-cd public/resources
-***rename the .env.example file to .env and change the TWILIO_WORKSPACE_SID=Your Flex Task Assignment SID
-```
 
 ```
 Run: 
@@ -31,12 +24,16 @@ cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
 AUTH_TOKEN= Found at https://www.twilio.com/console
-TWILIO_WORKFLOW_SID= 
+```
+
+```
+Run: (from the serverless directory)
+npm install
 ```
 
 ```
 Run: 
-npm install
+twilio plugins:install &twilio-labs/plugin-serverless
 ```
 
 ```
@@ -45,11 +42,21 @@ twilio serveless:deploy --assets
 ```
 *Do this if you haven't deployed the serverless functions already*
 
+
+```
+Run: 
+cd ..
+cd public
+(Navigate to the public folder found in the root directory):
+rename appConfig.example.js to appConfig.js
+```
+
+
 ```
 Run: 
 From the root plugin directory rename the .env.example file to .env and change the below:
 REACT_APP_SERVICE_BASE_URL = 
-Points to the Twilio Function Service URL (example: https://serverless-XXXX-dev.twil.io)
+Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
 
 Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on serverless (should look like serverless-XXXX-dev.twil.io)
 
