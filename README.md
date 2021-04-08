@@ -42,7 +42,7 @@ twilio serverless:deploy
 
 copy the domain as you'll need this for the .env in the next step
 ```
-      *Do this if you haven't deployed the serverless functions already*
+*Do this if you haven't deployed the serverless functions already*
 
 ```
 From the root plugin directory rename the .env.example file to .env and change the below:

@@ -1,10 +1,8 @@
 import { FlexPlugin } from 'flex-plugin';
 import React from 'react';
 
-//import for the supervisor barge button component
-import SupervisorBargeButton from './components/SupervisorBargeButton';
-//import for the supervisor coach button component
-import SupervisorCoachButton from './components/SupervisorCoachButton';
+//import for the supervisor barge and coach buttons component
+import SupervisorBargeCoachButton from './components/SupervisorBargeCoachButton';
 
 const PLUGIN_NAME = 'SupervisorBargeCoachPlugin';
 
@@ -22,11 +20,8 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
    */
   init(flex, manager) {
     
-    //Add the Barge Option
-    flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeButton key="barge-button" />);
-    
-    //Add the Coach Option
-    flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorCoachButton key="coach-button" />);
+    //Add the Barge-in and Coach Option
+    flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
 
   } //end init
 } //end SupervisorBargePlugin
