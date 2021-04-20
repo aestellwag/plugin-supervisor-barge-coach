@@ -41,10 +41,19 @@ exports.handler = TokenValidator(async (context, event, callback) => {
           coaching: coaching,
           callSidToCoach: agentSid
         }
-      )  
+      )
+      response.setBody({
+        status: 200,
+        participantResponse
+      });  
     console.log(`Updating participant: ${participant} in conference: ${conference}, coaching status is ${coaching} - agent we are coaching ${agentSid}`)  
   } catch (error){
     console.error(error);
+    response.setBody({
+      status: error.status || 500,
+      error
+    });
+    response.setStatusCode(error.status || 500);
   }
   // Once we have set the coaching status, we can now unmute our line
   try {
@@ -53,18 +62,20 @@ exports.handler = TokenValidator(async (context, event, callback) => {
       .participants(participant)
       .update(
         { muted: muted }
-      )  
+      )
+    response.setBody({
+      status: 200,
+      participantResponse
+    });
     console.log(`Setting Mute to ${muted}.`);  
   } catch (error){
     console.error(error);
+    response.setBody({
+      status: error.status || 500,
+      error
+    });
+    response.setStatusCode(error.status || 500);
   }
-  
-  console.log('Participant response properties:');
-  
-  response.setBody({
-    status: 200,
-    participantResponse
-  });
 
   return callback(null, response);
 });

@@ -37,15 +37,18 @@ exports.handler = TokenValidator(async (context, event, callback) => {
       .conferences(conference)
       .participants(participant)
       .update({muted})
+    response.setBody({
+      status: 200,
+      participantResponse
+    });
   } catch (error){
     console.error(error);
+    response.setBody({
+      status: error.status || 500,
+      error
+    });
+    response.setStatusCode(error.status || 500); 
   }
-  console.log('Participant response properties:');
-  
-  response.setBody({
-    status: 200,
-    participantResponse
-  });
 
   return callback(null, response);
 });

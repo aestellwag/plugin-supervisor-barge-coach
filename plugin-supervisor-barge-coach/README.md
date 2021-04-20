@@ -2,6 +2,10 @@
 
 Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
 
+This plugin adds a barge-in and coach button to the Monitor call canvas.  You can get to this via the Team View, click on the agent you wish to monitor and the buttons will be available once you begin to monitor the live calls.
+
+![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin.gif)
+
 ## Pre-req
 
 It is assumed you have the Flex Plugins CLI but if you do not please follow the below guide before moving to the Setup section:
@@ -12,55 +16,59 @@ It is assumed you have the Flex Plugins CLI but if you do not please follow the 
 
 Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
 
-From the plugin directory
-```
-Run: 
+Navigate to the primary plugin folder and run NPM install for the plugin
+```bash
+cd plugin-supervisor-barge-coach
 npm install
 ```
 
-```
-Run: 
+Navigate to the serverless folder, create and modify the .env file
+```bash
+cd ..
 cd serverless
 ***rename the .env.example file to .env and change the below:
 ACCOUNT_SID= Found at https://www.twilio.com/console
 AUTH_TOKEN= Found at https://www.twilio.com/console 
 ```
 
-```
+Run NPM install for the serverless functions
+```bash
 Run: (from the serverless directory)
 npm install
 ```
 
-```
+Install the twilio plugin-serverless
+```bash
 Run: 
 twilio plugins:install @twilio-labs/plugin-serverless
 ```
 
-```
+Deploy the serverless functions into Twilio
+*Do this if you haven't deployed the serverless functions already*
+```bash
 Run: 
 twilio serverless:deploy
-
-copy the domain as you'll need this for the .env in the next step
 ```
-*Do this if you haven't deployed the serverless functions already*
+Copy the domain as you'll need this for the .env in the next step
 
-```
+
 From the root plugin directory rename the .env.example file to .env and change the below:
+```bash
+cd ..
+cd plugin-supervisor-barge-coach
 
-REACT_APP_SERVICE_BASE_URL = 
+var REACT_APP_SERVICE_BASE_URL = 
 Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
 
 Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on barge-coach (should look like barge-coach-XXXX-dev.twil.io)
 
-REACT_APP_TASK-CHANNEL_SID =
+var REACT_APP_TASK-CHANNEL_SID =
 Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
 ```
 
-```
-Run: 
-cd ..
+From the public folder, create the appConfig.js and change on variable within it
+```bash
 cd public
-(Navigate to the public folder found in the root directory):
 rename appConfig.example.js to appConfig.js
 
 change serviceBaseUrl: "https://supervisor-barge-coach-XXXX.twil.io"
@@ -70,8 +78,7 @@ change serviceBaseUrl: "https://supervisor-barge-coach-XXXX.twil.io"
 
 In order to develop locally, you can use the Webpack Dev Server by running (from the root plugin directory):
 
-```
-Run: 
+```bash
 Twilio flex:plugins:start
 ```
 
