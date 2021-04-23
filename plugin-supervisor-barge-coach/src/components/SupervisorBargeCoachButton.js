@@ -91,14 +91,6 @@ class SupervisorBargeCoachButton extends React.Component {
     let agentParticipant = conferenceChildren.find(p => p.value.participant_type === 'worker'
       && this.props.agentWorkerSID === p.value.worker_sid);
     
-    // This if statement is here for a rare edge case, if the supervisor refreshes after clicking
-    // the call to monitor, the stickyWorker attribute will be null, which is what we leverage to confirm
-    // we are coaching the correct worker.  In this case there is no easy way to get the stickyWorker without
-    // the supervisor clicking the call within the Team View to re-populate the attribute.  We will default
-    // to the first worker we find to coach for this scenario
-    if (agentParticipant == null) {
-      agentParticipant = conferenceChildren.find(p => p.value.participant_type === 'worker');
-    }
     console.log(`Current agentWorkerSID = ${this.props.agentWorkerSID}`);
     console.log(`Current agentSID = ${agentParticipant?.key}`);
 
@@ -162,16 +154,18 @@ class SupervisorBargeCoachButton extends React.Component {
   }
 }
 
-// Getting the Supervisor's workerSID so we can use it later
-// Also getting the Agent's workerSID we are monitoring to ensure
-// This is specific to coaching to ensure we are unmuting the correct worker
-// If there are multiple agents on the call
-// Also pulling back the states from the redux store as we will use those later
-// to manipulate the buttons
+// Getting the Supervisor's workerSID so we can use it later, the Agent's workerSID (stickyWorker) we are monitoring to ensure
+// this is specific to coaching to ensure we are unmuting the correct worker if there are multiple agents on the cal
 const mapStateToProps = (state) => {
   const myWorkerSID = state?.flex?.worker?.worker?.sid;
-  const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
-
+  let agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
+  // For edge case if the browser refreshes while they are monitoring a call the stickyWorker will come up null, 
+  // we are going to store in browser cache the value for this scenario
+  if (agentWorkerSID != null) {
+    localStorage.setItem('agentWorkerSID',agentWorkerSID);
+  } else {
+    agentWorkerSID = localStorage.getItem('agentWorkerSID');
+  }
   // Also pulling back the states from the redux store as we will use those later
   // to manipulate the buttons
   const customReduxStore = state?.['barge-coach'].bargecoach;
