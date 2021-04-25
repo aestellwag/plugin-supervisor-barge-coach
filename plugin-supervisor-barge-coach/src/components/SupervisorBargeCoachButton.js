@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Manager, IconButton, TaskHelper, withTheme } from '@twilio/flex-ui';
+import { IconButton, TaskHelper, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 import ConferenceService from '../services/ConferenceService';
 import { connect } from 'react-redux';
@@ -87,9 +87,8 @@ class SupervisorBargeCoachButton extends React.Component {
 
     // Pulling the agentSID that we will be coaching on this conference
     // Ensuring they are a worker (IE agent) and it matches the agentWorkerSID we pulled from the props
-    // at the bottom of this js file
     let agentParticipant = conferenceChildren.find(p => p.value.participant_type === 'worker'
-      && this.props.agentWorkerSID === p.value.worker_sid);
+    && this.props.agentWorkerSID === p.value.worker_sid);
     
     console.log(`Current agentWorkerSID = ${this.props.agentWorkerSID}`);
     console.log(`Current agentSID = ${agentParticipant?.key}`);
@@ -138,7 +137,10 @@ class SupervisorBargeCoachButton extends React.Component {
           disabled={!isLiveCall || !enableBargeinButton}
           onClick={this.bargeHandleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
-          title={ coaching ? (muted ? "You are muted" : "You are unmuted") : "Barge-in" }
+          title={ coaching 
+            ? ( muted 
+              ? "You are muted" : "You are unmuted") 
+                : "Barge-in" }
           style={buttonStyle}
         />
         <IconButton
@@ -158,14 +160,18 @@ class SupervisorBargeCoachButton extends React.Component {
 // this is specific to coaching to ensure we are unmuting the correct worker if there are multiple agents on the cal
 const mapStateToProps = (state) => {
   const myWorkerSID = state?.flex?.worker?.worker?.sid;
-  let agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
-  // For edge case if the browser refreshes while they are monitoring a call the stickyWorker will come up null, 
-  // we are going to store in browser cache the value for this scenario
-  if (agentWorkerSID != null) {
-    localStorage.setItem('agentWorkerSID',agentWorkerSID);
-  } else {
-    agentWorkerSID = localStorage.getItem('agentWorkerSID');
+  const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
+  console.log(`sticky worker = ${agentWorkerSID}`);
+
+  const teamViewPath = state?.flex?.router?.location?.pathname;
+
+  // Storing teamViewPath to browser cache to help if a refresh happens
+  // will use this in the main plugin file to invoke an action
+  if (teamViewPath != null) {
+    console.log('Storing teamViewPath to cache');
+    localStorage.setItem('teamViewPath',teamViewPath);
   }
+
   // Also pulling back the states from the redux store as we will use those later
   // to manipulate the buttons
   const customReduxStore = state?.['barge-coach'].bargecoach;

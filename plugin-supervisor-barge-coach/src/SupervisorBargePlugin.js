@@ -1,5 +1,5 @@
 import { FlexPlugin } from 'flex-plugin';
-import { VERSION } from '@twilio/flex-ui';
+import { Manager, Actions, VERSION } from '@twilio/flex-ui';
 import React from 'react';
 
 //import for the supervisor barge and coach buttons component
@@ -30,7 +30,27 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
     this.registerReducers(manager);
     //Add the Barge-in and Coach Option
     flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
+    
+    // Only used for the coach feature if some reason the browser refreshes after the agent is being monitored
+    // we will lose the stickyWorker attribute that we use for agentWorkerSID (see \components\SupervisorBargeCoachButton.js for reference)
+    // We need to invoke an action to trigger this again, so it populates the stickyWorker for us 
+    const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
+    const teamViewPath = localStorage.getItem('teamViewPath');
 
+    // Check that the stickyWorker is null and that we are within the teams View in Flex
+    if (agentWorkerSID == null && teamViewPath != null) {
+      console.log(`${teamViewPath}`);
+
+      // We are parsing the prop teamViewTaskPath into an array, split it between the '/'
+      // Then finding the which object in the array starts with WR, which is the SID we need
+      const arrayTeamView = teamViewPath.split('/');
+      const teamViewTaskSID = arrayTeamView.filter(s => s.includes('WR'));
+      console.log(`teamViewSID = ${teamViewTaskSID}`);
+
+      // Invoke action to trigger the monitor button so we can populate the stickyWorker attribute
+      console.log(`Triggering the invokeAction`);
+      Actions.invokeAction("SelectTaskInSupervisor", { sid: teamViewTaskSID });
+    }
   } //end init
 
   /**
