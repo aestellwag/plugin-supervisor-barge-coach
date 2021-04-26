@@ -37,12 +37,12 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
     const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
     const teamViewPath = localStorage.getItem('teamViewPath');
 
-    // Check that the stickyWorker is null and that we are within the teams View in Flex
+    // Check that the stickyWorker is null and that we are attempting to restore the last worker they monitored
     if (agentWorkerSID == null && teamViewPath != null) {
       console.log(`${teamViewPath}`);
 
-      // We are parsing the prop teamViewTaskPath into an array, split it between the '/'
-      // Then finding the which object in the array starts with WR, which is the SID we need
+      // We are parsing the prop teamViewTaskPath into an array, split it between the '/',
+      // then finding which object in the array starts with WR, which is the SID we need
       const arrayTeamView = teamViewPath.split('/');
       const teamViewTaskSID = arrayTeamView.filter(s => s.includes('WR'));
       console.log(`teamViewSID = ${teamViewTaskSID}`);

@@ -156,8 +156,8 @@ class SupervisorBargeCoachButton extends React.Component {
   }
 }
 
-// Getting the Supervisor's workerSID so we can use it later, the Agent's workerSID (stickyWorker) we are monitoring to ensure
-// this is specific to coaching to ensure we are unmuting the correct worker if there are multiple agents on the cal
+// Getting the Supervisor's workerSID so we can use it later, the Agent's workerSID (stickyWorker) we are monitoring
+// This is specific to coaching to ensure we are unmuting the correct worker, if there are multiple agents on the call
 const mapStateToProps = (state) => {
   const myWorkerSID = state?.flex?.worker?.worker?.sid;
   const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
