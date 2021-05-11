@@ -2,16 +2,62 @@ import { FlexPlugin } from 'flex-plugin';
 import { Manager, Actions, VERSION } from '@twilio/flex-ui';
 import React from 'react';
 
-//import for the supervisor barge and coach buttons component
-import SupervisorBargeCoachButton from './components/SupervisorBargeCoachButton';
+// Leverage for the Sync Documents used for Coach Alerts across user sessions
+import { SyncClient } from "twilio-sync";
+// Used for Sync Docs
+import { SyncDoc } from './services/Sync'
 
-//import the reducers
+// import for the supervisor barge and coach buttons component, and Coaching Panel
+import SupervisorBargeCoachButton from './components/SupervisorBargeCoachButton'; 
+import CoachingStatusPanel from './components/CoachingStatusPanel';
+
+// import the reducers
 import reducers, { namespace } from './states';
+// import the custom listeners
+import './listeners/CustomListeners';
 
 const PLUGIN_NAME = 'SupervisorBargeCoachPlugin';
 
-//import the custom listeners
-import './listeners/CustomListeners';
+// Generate token for the sync client
+export const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
+
+// Refresh sync client token
+function tokenUpdateHandler() {
+
+  console.log("OUTBOUND DIALPAD: Refreshing SYNC_CLIENT Token");
+
+  const loginHandler = Manager.getInstance().store.getState().flex.session.loginHandler;
+
+  const tokenInfo = loginHandler.getTokenInfo();
+  const accessToken = tokenInfo.token;
+
+  SYNC_CLIENT.updateToken(accessToken);
+}
+//TODO: List below:
+//      1 - Need to ensure that it creates or gets existing sync doc for each worker (might need another service to call for this)
+//        --(Completed)
+//      2 - Then make sure they are subscribed to updates only to the sync doc for their user
+//        --(Completed)
+//      3 - When Supervisor Clicks Coach, update the AgentWorkerSID sync doc with the conference, supervisorSID (that is coachaing), and the coaching status
+//        --(Completed)
+//      4 - Update Agent UI to show what supervisor is coaching them
+//        --(Completed)
+//      5 - Clean up for user clicks/behaviors on the agent and supervisor side
+//        5a - Clean up if Supervisor unmonitors the call
+//            --(Completed)
+//        5b - Clean up if the Supervisor refreshes the browser
+//            --(Completed)
+//        5c - Agent ends the call and starts a new one
+//            --(Completed)
+//        5d - Agent Refreshes the browser?
+//            --(Completed)
+//      6 - Configure Enable/Disable flag for the feature
+//        --(Completed)
+//      7 - Add a new button specific to mute/unmute.  You should have Mute/Umute - Barge - Coach
+//        7a - Maybe add active color icons for Barge / Coach?
+//      8 - Update ReadMe
+//        8a - Remember to add the true/false flag to disable the CoachingStatusPanel
+//      9 - In testing, need to think of how to clear Monitor Panel when the agent ends the call or refreshes browser, small edge case but one I'd like to build in
 
 export default class SupervisorBargeCoachPlugin extends FlexPlugin {
   constructor() {
@@ -30,6 +76,12 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
     this.registerReducers(manager);
     //Add the Barge-in and Coach Option
     flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
+    
+    // Adding Coaching Status Panel to notify the agent who is Coaching them
+    flex.CallCanvas.Content.add(
+      <CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {
+        sortOrder: -1
+    });
     
     // Only used for the coach feature if some reason the browser refreshes after the agent is being monitored
     // we will lose the stickyWorker attribute that we use for agentWorkerSID (see \components\SupervisorBargeCoachButton.js for reference)
@@ -50,7 +102,17 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
       // Invoke action to trigger the monitor button so we can populate the stickyWorker attribute
       console.log(`Triggering the invokeAction`);
       Actions.invokeAction("SelectTaskInSupervisor", { sid: teamViewTaskSID });
+
+      // If agentSyncDoc exists, clear the Agent Sync Doc to account for the refresh
+      const agentSyncDoc = localStorage.getItem('agentSyncDoc');
+      if(agentSyncDoc != null) {
+        SyncDoc.clearSyncDoc(agentSyncDoc);
+      }
     }
+
+    // Add listener to loginHandler to refresh token when it expires
+    manager.store.getState().flex.session.loginHandler.on("tokenUpdated", tokenUpdateHandler);
+  
   } //end init
 
   /**

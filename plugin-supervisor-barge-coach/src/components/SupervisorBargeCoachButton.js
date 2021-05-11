@@ -2,9 +2,15 @@ import * as React from 'react';
 import { IconButton, TaskHelper, withTheme } from '@twilio/flex-ui';
 import styled from 'react-emotion';
 import ConferenceService from '../services/ConferenceService';
+
+// Used for Sync Docs
+import { SyncDoc } from '../services/Sync'
+
+// Used for the custom redux state
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions as BargeCoachStatusAction, } from '../states/BargeCoachState';
+import { initialState } from '../states/BargeCoachState';
 
 const ButtonContainer = styled('div')`
   display: flex;
@@ -24,6 +30,18 @@ class SupervisorBargeCoachButton extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  // Initial sync doc listener, will use this when calling the coachHandleClick
+  // Pull values from props as we need to confirm we are updating the agent's sync doc
+  // and adding the conference, supervisor, and coaching status
+  initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, coaching) {
+    const { task } = this.props;
+    const docToUpdate = `syncDoc.${agentWorkerSID}`;
+
+    // Updating the sync doc for the agent, this will be triggered only from coachHandleClick
+    console.log(`Updating Sync Doc: ${docToUpdate}, with conference: ${conferenceSID}, supervisor coaching: ${supervisorFN}, and coaching status to: ${coaching}`);
+    SyncDoc.updateSyncDoc(docToUpdate, conferenceSID, supervisorFN, coaching);
+  }
   
   // On click we will be pulling the conference SID and supervisorSID
   // to trigger Mute / Unmute respectively for that user - muted comes from the redux store
@@ -33,9 +51,11 @@ class SupervisorBargeCoachButton extends React.Component {
   bargeHandleClick = () => {
     const { task } = this.props;
     const conference = task && task.conference;
-    const conferenceSid = conference && conference.conferenceSid;
+    const conferenceSID = conference && conference.conferenceSid;
     const muted = this.props.muted;
     const conferenceChildren = conference?.source?.children || [];
+    const barge = this.props.barge;
+    const coaching = this.props.coaching;
 
     // Checking the conference within the task for a participant with the value "supervisor", 
     // is their status "joined", reason for this is every time you click monitor/unmonitor on a call
@@ -54,12 +74,33 @@ class SupervisorBargeCoachButton extends React.Component {
       return;
     }
     // Barge-in will "unmute" their line if the are muted, else "mute" their line if they are unmuted
+    // Also account for coach status to enable/disable barge as we call this when clicking the mute/unmute button
     if (muted) {
-      ConferenceService.unmuteParticipant(conferenceSid, supervisorParticipant.key);
-      this.props.setBargeCoachStatus({ muted: false });
+      ConferenceService.unmuteParticipant(conferenceSID, supervisorParticipant.key);
+      if (coaching) {
+        this.props.setBargeCoachStatus({ 
+          muted: false, 
+          barge: false
+        });
+      } else {
+        this.props.setBargeCoachStatus({ 
+          muted: false,
+          barge: true
+        });
+      }
     } else {
-      ConferenceService.muteParticipant(conferenceSid, supervisorParticipant.key);
-      this.props.setBargeCoachStatus({ muted: true });
+      ConferenceService.muteParticipant(conferenceSID, supervisorParticipant.key);
+      if (coaching) {
+        this.props.setBargeCoachStatus({ 
+          muted: true,
+          barge: false 
+        });
+      } else {
+        this.props.setBargeCoachStatus({ 
+          muted: true,
+          barge: true
+        });
+      }
     }
   }
 
@@ -68,10 +109,11 @@ class SupervisorBargeCoachButton extends React.Component {
   // We've built in resiliency if the supervisor refreshes their browser
   // or clicks monitor/un-monitor multiple times, it still confirms that
   // we allow the correct worker to coach on the call
+
   coachHandleClick = () => {
     const { task } = this.props;
     const conference = task && task.conference;
-    const conferenceSid = conference && conference.conferenceSid;
+    const conferenceSID = conference && conference.conferenceSid;
     const coaching = this.props.coaching;
     const conferenceChildren = conference?.source?.children || [];
 
@@ -101,17 +143,41 @@ class SupervisorBargeCoachButton extends React.Component {
     }
     // Coaching will "enable" their line if they are disabled, else "disable" their line if they are enabled
     if (coaching) {
-      ConferenceService.disableCoaching(conferenceSid, supervisorParticipant.key, agentParticipant.key);
+      ConferenceService.disableCoaching(conferenceSID, supervisorParticipant.key, agentParticipant.key);
       this.props.setBargeCoachStatus({ 
         coaching: false,
-        muted: true 
+        muted: true,
+        barge: false
       });
+
+      // If coachingStatusPanel is true (enabled), proceed
+      // otherwise we will not subscribe to the Sync Doc
+      // You can toggle this at ../states/BargeCoachState
+      const coachingStatusPanel = initialState.coachingStatusPanel;
+      if (coachingStatusPanel) {
+        // Updating the Sync Doc based on coaching status
+        // Toggling Coaching to false, setting the SupervisorSID to "" as we use this
+        // to validate if there is a supervisor actively coaching them within the Agent UI
+        this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
+      }
     } else {
-      ConferenceService.enableCoaching(conferenceSid, supervisorParticipant.key, agentParticipant.key);
+      ConferenceService.enableCoaching(conferenceSID, supervisorParticipant.key, agentParticipant.key);
       this.props.setBargeCoachStatus({ 
         coaching: true,
-        muted: false 
+        muted: false,
+        barge: false 
       });
+
+      // If coachingStatusPanel is true (enabled), proceed
+      // otherwise we will not subscribe to the Sync Doc
+      // You can toggle this at ../states/BargeCoachState
+      const coachingStatusPanel = initialState.coachingStatusPanel;
+      if (coachingStatusPanel) {
+        // Updating the Sync Doc based on coaching status
+        // Toggling Coaching to true, passing the supervisor's full name that is coaching
+        // The Agent will pull this back within their Sync Doc to update the UI
+        this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, true);
+      }
     }
   }
 
@@ -119,6 +185,7 @@ class SupervisorBargeCoachButton extends React.Component {
   // if the supervisor isn't monitoring the call, toggle the icon based on coach and barge-in status
   render() {
     const muted = this.props.muted;
+    const barge = this.props.barge;
     const enableBargeinButton = this.props.enableBargeinButton;
     const coaching = this.props.coaching;
     const enableCoachButton = this.props.enableCoachButton;
@@ -128,19 +195,19 @@ class SupervisorBargeCoachButton extends React.Component {
     return (
       <ButtonContainer>
         <IconButton
-          icon={ muted && coaching 
-            ? `MuteLargeBold` 
-            : coaching 
-              ? `MuteLarge` 
-              : muted 
-                ? 'IncomingCall' : 'IncomingCallBold' }
-          disabled={!isLiveCall || !enableBargeinButton}
+          icon={ muted ? 'MuteLargeBold' : 'MuteLarge' }
+          disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching) }
           onClick={this.bargeHandleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
-          title={ coaching 
-            ? ( muted 
-              ? "You are muted" : "You are unmuted") 
-                : "Barge-in" }
+          title={ muted ? "Unmute" : "Mute" }
+          style={buttonStyle}
+        />
+        <IconButton
+          icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
+          disabled={!isLiveCall || !enableBargeinButton || coaching }
+          onClick={this.bargeHandleClick}
+          themeOverride={this.props.theme.CallCanvas.Button}
+          title={ barge ? 'Barge-Out' : 'Barge-In' }
           style={buttonStyle}
         />
         <IconButton
@@ -148,7 +215,7 @@ class SupervisorBargeCoachButton extends React.Component {
           disabled={!isLiveCall || !enableCoachButton}
           onClick={this.coachHandleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
-          title="Coach"
+          title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
           style={buttonStyle}
         />
       </ButtonContainer>
@@ -161,31 +228,46 @@ class SupervisorBargeCoachButton extends React.Component {
 const mapStateToProps = (state) => {
   const myWorkerSID = state?.flex?.worker?.worker?.sid;
   const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
+  const supervisorFN = state?.flex?.worker?.attributes?.full_name;
   console.log(`sticky worker = ${agentWorkerSID}`);
-
-  const teamViewPath = state?.flex?.router?.location?.pathname;
-
-  // Storing teamViewPath to browser cache to help if a refresh happens
-  // will use this in the main plugin file to invoke an action
-  if (teamViewPath != null) {
-    console.log('Storing teamViewPath to cache');
-    localStorage.setItem('teamViewPath',teamViewPath);
-  }
 
   // Also pulling back the states from the redux store as we will use those later
   // to manipulate the buttons
   const customReduxStore = state?.['barge-coach'].bargecoach;
   const muted = customReduxStore.muted;
+  const barge = customReduxStore.barge;
   const enableBargeinButton = customReduxStore.enableBargeinButton;
   const coaching = customReduxStore.coaching;
   const enableCoachButton = customReduxStore.enableCoachButton;
+
+  const teamViewPath = state?.flex?.router?.location?.pathname;
+
+  // Storing teamViewPath and agentSyncDoc to browser cache to help if a refresh happens
+  // will use this in the main plugin file to invoke an action to reset the monitor panel
+  // and clear the Agent's Sync Doc
+  if (teamViewPath != null) {
+    console.log('Storing teamViewPath to cache');
+    localStorage.setItem('teamViewPath',teamViewPath);
+
+    // If coachingStatusPanel is true (enabled), proceed
+    // otherwise we will not subscribe to the Sync Doc
+    // You can toggle this at ../states/BargeCoachState
+    const coachingStatusPanel = customReduxStore.coachingStatusPanel;
+    if (coachingStatusPanel) {
+    console.log('Storing agentSyncDoc to cache');
+    localStorage.setItem('agentSyncDoc',`syncDoc.${agentWorkerSID}`);
+    }
+  }
+
   return {
     myWorkerSID,
     agentWorkerSID,
+    supervisorFN,
     muted,
+    barge,
     enableBargeinButton,
     coaching,
-    enableCoachButton
+    enableCoachButton,
   };
 };
 

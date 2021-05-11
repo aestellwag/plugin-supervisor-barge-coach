@@ -39,7 +39,7 @@ class ConferenceService {
   // passing the conferenceSID, the participantSID, and 
   // flip them from disable/enable coaching respectively when clicking the button
   _toggleParticipantCoaching = (conference, participantSid, muted, coaching, agentSid) => {
-    console.log(`Passing conference: ${conference}, supervisor: ${participantSid}, and agent: ${agentSid} to the coaching Twilio funciton as ${coaching}`);
+    console.log(`Passing conference: ${conference}, supervisor: ${participantSid}, and agent: ${agentSid} to the coaching Twilio function as ${coaching}`);
     return new Promise((resolve, reject) => {
       request('coaching', this.manager, {
         conference,

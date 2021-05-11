@@ -1,10 +1,15 @@
 const ACTION_SET_BARGE_COACH_STATUS = 'SET_BARGE_COACH_STATUS';
 // Set the initial state of the below that we will use to change the buttons
-const initialState = {
+export const initialState = {
     coaching: false,
     enableCoachButton: false,
     muted: true,
-    enableBargeinButton: false
+    barge: false,
+    enableBargeinButton: false,
+    supervisorName: "",
+    // Toggle coachingStatusPanel feature - the ability for the agent to see who is coaching them
+    // true = enabled, false = disabled
+    coachingStatusPanel: true
 };
 
 export class Actions {
