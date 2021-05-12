@@ -18,6 +18,14 @@ const ButtonContainer = styled('div')`
   margin-bottom: 6px;
 `;
 
+const buttonStyleActive = {
+  width: '44px',
+  height: '44px',
+  'marginLeft': '6px',
+  'marginRight': '6px',
+  'color': 'limegreen',
+}
+
 const buttonStyle = {
   width: '44px',
   height: '44px',
@@ -54,7 +62,6 @@ class SupervisorBargeCoachButton extends React.Component {
     const conferenceSID = conference && conference.conferenceSid;
     const muted = this.props.muted;
     const conferenceChildren = conference?.source?.children || [];
-    const barge = this.props.barge;
     const coaching = this.props.coaching;
 
     // Checking the conference within the task for a participant with the value "supervisor", 
@@ -208,7 +215,7 @@ class SupervisorBargeCoachButton extends React.Component {
           onClick={this.bargeHandleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
           title={ barge ? 'Barge-Out' : 'Barge-In' }
-          style={buttonStyle}
+          style={ barge ? buttonStyleActive : buttonStyle }
         />
         <IconButton
           icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
@@ -216,7 +223,7 @@ class SupervisorBargeCoachButton extends React.Component {
           onClick={this.coachHandleClick}
           themeOverride={this.props.theme.CallCanvas.Button}
           title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
-          style={buttonStyle}
+          style={ coaching ? buttonStyleActive : buttonStyle }
         />
       </ButtonContainer>
     );

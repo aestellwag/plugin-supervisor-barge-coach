@@ -11,8 +11,11 @@ This plugin adds a barge-in and coach button to the Monitor call canvas.  You ca
 First select the call/worker you wish to monitor
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-1.gif)
 
-Click the Monitor button to enable the Barge-In Button (Left Button) and Coach Button (Right Button)
+Click the Monitor button to enable the Barge-In Button (Middle Button) and Coach Button (Right Button)
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-2.gif)
+
+As of the Version 2 Update to the plugin, there has been an addition of the Coach Status Panel to the Agent's UI.  If enabled, the agent will see who is coaching them if a Supervisor is actively coaching them.  This can be enabled/disabled within ../states/BargeCoachState.js file
+![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-3.gif)
 
 ## Pre-req
 
@@ -105,6 +108,18 @@ rename appConfig.example.js to appConfig.js
 change serviceBaseUrl: "https://barge-coach-XXXX.twil.io"
 ```
 
+If you wish to enable or disable the Coach Status Panel:
+```bash
+cd ..
+cd src
+cd states
+open BargeCoachState.js and change the below variable coachingStatusPanel
+
+// Toggle coachingStatusPanel feature - the ability for the agent to see who is coaching them
+// true = enabled, false = disabled
+coachingStatusPanel: XXXXX
+```
+
 ## Development
 
 In order to develop locally, you can use the Webpack Dev Server by running (from the root plugin directory):
@@ -130,12 +145,19 @@ For more details on deploying your plugin, refer to the [deploying your plugin g
 
 After running the suggested next step with a meaningful name and description, navigate to the [Plugins Dashboard](https://flex.twilio.com/admin/) to review your recently deployed and released plugin. Confirm that the latest version is enabled for your contact center.
 
-You are all set to test chat and sms transfers on your Flex instance!
+You are all set to test the Supervisor Barge/Coach features on your Flex instance!
 
 
 ---
 
 ## Changelog
+
+### 2.0.0
+
+**May 12, 2021**
+
+- Added the Coach Status Panel to allow the agent to see who is coaching them (this leverages Sync Documents)
+- Updated the Button Layout to be more user friendly (now has a Mute, Barge, and Coach button)
 
 ### 1.0.0
 

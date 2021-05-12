@@ -54,7 +54,9 @@ function tokenUpdateHandler() {
 //      6 - Configure Enable/Disable flag for the feature
 //        --(Completed)
 //      7 - Add a new button specific to mute/unmute.  You should have Mute/Umute - Barge - Coach
+//        --(Completed)
 //        7a - Maybe add active color icons for Barge / Coach?
+//            --(Completed)
 //      8 - Update ReadMe
 //        8a - Remember to add the true/false flag to disable the CoachingStatusPanel
 //      9 - In testing, need to think of how to clear Monitor Panel when the agent ends the call or refreshes browser, small edge case but one I'd like to build in

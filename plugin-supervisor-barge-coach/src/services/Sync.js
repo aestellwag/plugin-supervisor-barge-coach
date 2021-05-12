@@ -1,14 +1,10 @@
-import { Manager } from "@twilio/flex-ui";
 import { SYNC_CLIENT } from "../SupervisorBargePlugin";
+import { Manager } from "@twilio/flex-ui";
 import { request } from './request';
 
 class SyncDocClass {
 
 	constructor() {
-		// Don't believe I need this now that I'm passing it in  t
-		// const manager = Manager.getInstance();
-		// const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
-		// this.syncDocName = `syncDoc.${myWorkerSID}`;
 	}
 
 	// Getting the Sync Document
@@ -60,28 +56,6 @@ class SyncDocClass {
 				});
 			})
 	}
-	// TODO: If we find we do not need this, we can remove the updateSyncDoc.js file under ..\serverless\functions
-	// 		 before updating the github repo
-	// TODO: This is calling a function and I do not believe we will require this at all based
-	// 		 on my testing, keeping it in for now until final review
-	// forceUpdateStatus(syncDocName, conferenceSid, supervisorSid, coaching) {
-
-	// 	const manager = Manager.getInstance();
-	// 	const token = manager.user.token;
-		
-	// 	return new Promise((resolve, reject) => {
-	// 		request('updateSyncDoc', this.manager, {
-	// 			syncDocName,
-	// 			conferenceSid,
-	// 			supervisorSid,
-	// 			coaching
-	// 		}).then(response => {
-	// 		  	resolve();
-	// 		}).catch(error => {
-	// 		  	reject(error);
-	// 		});
-	// 	});
-	// }
 }
 
 export const SyncDoc = new SyncDocClass();
