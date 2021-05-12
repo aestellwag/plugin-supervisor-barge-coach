@@ -1,6 +1,4 @@
 import { SYNC_CLIENT } from "../SupervisorBargePlugin";
-import { Manager } from "@twilio/flex-ui";
-import { request } from './request';
 
 class SyncDocClass {
 
@@ -17,7 +15,6 @@ class SyncDocClass {
 				})
 		})
 	}
-
 
 	// This is where we update the Sync Document we pass in the syncDocName we are updating, the conferenceSID
 	// we are monitoring/coaching, the supervisor's Full name, and toggle the coaching status true/false

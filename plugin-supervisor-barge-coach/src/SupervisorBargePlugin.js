@@ -33,33 +33,6 @@ function tokenUpdateHandler() {
 
   SYNC_CLIENT.updateToken(accessToken);
 }
-//TODO: List below:
-//      1 - Need to ensure that it creates or gets existing sync doc for each worker (might need another service to call for this)
-//        --(Completed)
-//      2 - Then make sure they are subscribed to updates only to the sync doc for their user
-//        --(Completed)
-//      3 - When Supervisor Clicks Coach, update the AgentWorkerSID sync doc with the conference, supervisorSID (that is coachaing), and the coaching status
-//        --(Completed)
-//      4 - Update Agent UI to show what supervisor is coaching them
-//        --(Completed)
-//      5 - Clean up for user clicks/behaviors on the agent and supervisor side
-//        5a - Clean up if Supervisor unmonitors the call
-//            --(Completed)
-//        5b - Clean up if the Supervisor refreshes the browser
-//            --(Completed)
-//        5c - Agent ends the call and starts a new one
-//            --(Completed)
-//        5d - Agent Refreshes the browser?
-//            --(Completed)
-//      6 - Configure Enable/Disable flag for the feature
-//        --(Completed)
-//      7 - Add a new button specific to mute/unmute.  You should have Mute/Umute - Barge - Coach
-//        --(Completed)
-//        7a - Maybe add active color icons for Barge / Coach?
-//            --(Completed)
-//      8 - Update ReadMe
-//        8a - Remember to add the true/false flag to disable the CoachingStatusPanel
-//      9 - In testing, need to think of how to clear Monitor Panel when the agent ends the call or refreshes browser, small edge case but one I'd like to build in
 
 export default class SupervisorBargeCoachPlugin extends FlexPlugin {
   constructor() {
