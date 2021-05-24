@@ -14,6 +14,7 @@ import SupervisorPrivateToggle from './components/SupervisorPrivateModeButton';
 
 // import the reducers
 import reducers, { namespace } from './states';
+import { Actions as BargeCoachStatusAction, } from './states/BargeCoachState';
 // import the custom listeners
 import './listeners/CustomListeners';
 
@@ -85,6 +86,14 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
       const agentSyncDoc = localStorage.getItem('agentSyncDoc');
       if(agentSyncDoc != null) {
         SyncDoc.clearSyncDoc(agentSyncDoc);
+      }
+      // This is here if the Supervisor refreshes and has toggled alerts to false
+      // By default alerts are enabled unless they toggle it off
+      let privateToggle = localStorage.getItem('privateToggle');
+      if (privateToggle === "false") {
+        manager.store.dispatch(BargeCoachStatusAction.setBargeCoachStatus({ 
+          coachingStatusPanel: false, 
+        }));
       }
     }
 

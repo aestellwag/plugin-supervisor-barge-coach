@@ -105,6 +105,11 @@ const mapStateToProps = (state) => {
   const coaching = customReduxStore.coaching;
   const coachingStatusPanel = customReduxStore.coachingStatusPanel
 
+  // Storing the coachingStatusPanel value that will be used in SupervisorBargePlugin.js
+  // If the supervisor refreshes, we want to remember their preference
+  console.log('Storing privateToggle to cache');
+  localStorage.setItem('privateToggle',coachingStatusPanel);
+
   return {
     agentWorkerSID,
     supervisorFN,
