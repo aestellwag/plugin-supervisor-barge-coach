@@ -7,8 +7,6 @@ export const initialState = {
     barge: false,
     enableBargeinButton: false,
     supervisorName: "",
-    // Toggle coachingStatusPanel feature - the ability for the agent to see who is coaching them
-    // true = enabled, false = disabled
     coachingStatusPanel: true
 };
 

@@ -10,12 +10,16 @@ import { SyncDoc } from '../services/Sync'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions as BargeCoachStatusAction, } from '../states/BargeCoachState';
-import { initialState } from '../states/BargeCoachState';
 
 const ButtonContainer = styled('div')`
   display: flex;
   justify-content: center;
   margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: center;
+  text-align: center;
 `;
 
 const buttonStyleActive = {
@@ -43,7 +47,6 @@ class SupervisorBargeCoachButton extends React.Component {
   // Pull values from props as we need to confirm we are updating the agent's sync doc
   // and adding the conference, supervisor, and coaching status
   initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, coaching) {
-    const { task } = this.props;
     const docToUpdate = `syncDoc.${agentWorkerSID}`;
 
     // Updating the sync doc for the agent, this will be triggered only from coachHandleClick
@@ -156,17 +159,11 @@ class SupervisorBargeCoachButton extends React.Component {
         muted: true,
         barge: false
       });
+      // Updating the Sync Doc based on coaching status
+      // Toggling Coaching to false, setting the SupervisorSID to "" as we use this
+      // to validate if there is a supervisor actively coaching them within the Agent UI
+      this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
 
-      // If coachingStatusPanel is true (enabled), proceed
-      // otherwise we will not subscribe to the Sync Doc
-      // You can toggle this at ../states/BargeCoachState
-      const coachingStatusPanel = initialState.coachingStatusPanel;
-      if (coachingStatusPanel) {
-        // Updating the Sync Doc based on coaching status
-        // Toggling Coaching to false, setting the SupervisorSID to "" as we use this
-        // to validate if there is a supervisor actively coaching them within the Agent UI
-        this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
-      }
     } else {
       ConferenceService.enableCoaching(conferenceSID, supervisorParticipant.key, agentParticipant.key);
       this.props.setBargeCoachStatus({ 
@@ -177,8 +174,7 @@ class SupervisorBargeCoachButton extends React.Component {
 
       // If coachingStatusPanel is true (enabled), proceed
       // otherwise we will not subscribe to the Sync Doc
-      // You can toggle this at ../states/BargeCoachState
-      const coachingStatusPanel = initialState.coachingStatusPanel;
+      const coachingStatusPanel = this.props.coachingStatusPanel;
       if (coachingStatusPanel) {
         // Updating the Sync Doc based on coaching status
         // Toggling Coaching to true, passing the supervisor's full name that is coaching
@@ -246,6 +242,7 @@ const mapStateToProps = (state) => {
   const enableBargeinButton = customReduxStore.enableBargeinButton;
   const coaching = customReduxStore.coaching;
   const enableCoachButton = customReduxStore.enableCoachButton;
+  const coachingStatusPanel = customReduxStore.coachingStatusPanel;
 
   const teamViewPath = state?.flex?.router?.location?.pathname;
 
@@ -256,14 +253,8 @@ const mapStateToProps = (state) => {
     console.log('Storing teamViewPath to cache');
     localStorage.setItem('teamViewPath',teamViewPath);
 
-    // If coachingStatusPanel is true (enabled), proceed
-    // otherwise we will not subscribe to the Sync Doc
-    // You can toggle this at ../states/BargeCoachState
-    const coachingStatusPanel = customReduxStore.coachingStatusPanel;
-    if (coachingStatusPanel) {
     console.log('Storing agentSyncDoc to cache');
     localStorage.setItem('agentSyncDoc',`syncDoc.${agentWorkerSID}`);
-    }
   }
 
   return {
@@ -275,6 +266,7 @@ const mapStateToProps = (state) => {
     enableBargeinButton,
     coaching,
     enableCoachButton,
+    coachingStatusPanel
   };
 };
 

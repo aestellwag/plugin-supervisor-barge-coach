@@ -11,11 +11,14 @@ This plugin adds a barge-in and coach button to the Monitor call canvas.  You ca
 First select the call/worker you wish to monitor
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-1.gif)
 
-Click the Monitor button to enable the Barge-In Button (Middle Button) and Coach Button (Right Button)
+Click the Monitor button to enable the Barge-In Button (Middle Button) and the Coach Button (Right Button)
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-2.gif)
 
-As of the Version 2 Update to the plugin, there has been an addition of the Coach Status Panel to the Agent's UI.  If enabled, the agent will see who is coaching them if a Supervisor is actively coaching them.  This can be enabled/disabled within ../states/BargeCoachState.js file
+As of the Version 2 Update to the plugin, there has been an addition of the Coach Status Panel to the Agent's UI.  This UI change can be enabled/disabled by the below button (as of Version 2.1 of this plugin)
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-3.gif)
+
+As of the Version 2.1 Update to the plugin, there has been an addition of the Private toggle to the Supervisor's UI.  Normal mode means the agent will see who is coaching them, Private mode means that the agent will not see who is coaching them
+![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-4.gif)
 
 ## Pre-req
 
@@ -108,18 +111,6 @@ rename appConfig.example.js to appConfig.js
 change serviceBaseUrl: "https://barge-coach-XXXX.twil.io"
 ```
 
-If you wish to enable or disable the Coach Status Panel:
-```bash
-cd ..
-cd src
-cd states
-open BargeCoachState.js and change the below variable coachingStatusPanel
-
-// Toggle coachingStatusPanel feature - the ability for the agent to see who is coaching them
-// true = enabled, false = disabled
-coachingStatusPanel: XXXXX
-```
-
 ## Development
 
 In order to develop locally, you can use the Webpack Dev Server by running (from the root plugin directory):
@@ -151,6 +142,13 @@ You are all set to test the Supervisor Barge/Coach features on your Flex instanc
 ---
 
 ## Changelog
+
+### 2.1.0
+
+**May 24, 2021**
+
+- Added a Private Toggle to to the Supervisor UI to enable/disable the ability for the agent to see who is coaching them
+- Fixed a minor bug when the coaching panel was rendering
 
 ### 2.0.0
 

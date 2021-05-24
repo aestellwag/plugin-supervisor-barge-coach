@@ -6,7 +6,6 @@ import styled from '@emotion/styled';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Actions as BargeCoachStatusAction, } from '../states/BargeCoachState';
-import { initialState } from '../states/BargeCoachState';
 
 // Import to get Sync Doc updates
 import { SyncDoc } from '../services/Sync';
@@ -27,46 +26,45 @@ class CoachingStatusPanel extends React.Component {
 
   render() {
     const myWorkerSID = this.props.myWorkerSID;
-    let coachingSupervisor = this.props.coachingSupervisor;
-    
-    // If coachingStatusPanel is true (enabled), proceed
-    // otherwise we will not subscribe to the Sync Doc
-    // You can toggle this at ../states/BargeCoachState
-    const coachingStatusPanel = initialState.coachingStatusPanel;
-    if (coachingStatusPanel) {
-      const mySyncDoc = `syncDoc.${myWorkerSID}`;
-      console.log(`${mySyncDoc}`);
-      SyncDoc.getSyncDoc(mySyncDoc)
-      .then(doc => {
-        console.log(doc.value);
-        // We are subscribing to Sync Doc updates here and logging anytime that happens
-        doc.on("updated", updatedDoc => {
-          console.log("Sync Doc Update Recieved: ", updatedDoc.value);
-          coachingSupervisor = doc.value.data.supervisor;
-          console.log(`Supervisor = ${coachingSupervisor}`);
-          
-          // Set Supervisor's name that is coaching into props
-          this.props.setBargeCoachStatus({ 
-            supervisorName: coachingSupervisor
-          });
-        })
-      });
+    let coachingSupervisor = this.props.coachingSupervisor;   
+    // Let's subscribe to the sync doc as an agent/work and check
+    // if we are being coached, if we are, render that in the UI
+    // otherwise leave it blank
+    const mySyncDoc = `syncDoc.${myWorkerSID}`;
+    console.log(`${mySyncDoc}`);
+    SyncDoc.getSyncDoc(mySyncDoc)
+    .then(doc => {
+      console.log(doc.value);
+      // We are subscribing to Sync Doc updates here and logging anytime that happens
+      doc.on("updated", updatedDoc => {
+        console.log("Sync Doc Update Recieved: ", updatedDoc.value);
+        coachingSupervisor = doc.value.data.supervisor;
+        console.log(`Supervisor = ${coachingSupervisor}`);
+        
+        // Set Supervisor's name that is coaching into props
+        this.props.setBargeCoachStatus({ 
+          supervisorName: coachingSupervisor
+        });
+      })
+    });
+    if(coachingSupervisor != "") {
       return (
         <Status> 
           {this.props.supervisorName != "" && 
-            <h1>You are being Coached by: 
-              <h2 style={{ "color": 'green' }}>
+            <div>You are being Coached by: 
+              <h1 style={{ "color": 'green' }}>
                 {this.props.supervisorName}
-              </h2>
-            </h1>
+              </h1>
+            </div>
           }
         </Status>
       );
+    } else {
+      return (
+        <Status>
+        </Status>
+      );
     }
-    return (
-      <Status>
-      </Status>
-    );
   }
 }
 
