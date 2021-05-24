@@ -34,16 +34,6 @@ function tokenUpdateHandler() {
 
   SYNC_CLIENT.updateToken(accessToken);
 }
-//FIXME:  Working on this but for some reason it fails when trying to call props from the new toggle button....
-
-
-
-//TODO: Version 2.1 Feature Notes
-//FIXME:
-//      1 - Add a Toggle to Enable/Disable the Agent seeing it (per Supervisor) from the Monitor Canvas - disabled by default?
-//          -Notes: Should be able to achieve this pretty easily by adding a button that updates the Sync Doc
-//          -Notes: Remove reference to the manual toggle in the README, repurpose that state value to pull from the Sync Doc for that
-//      2 - Add a Conference SID check to the Agent's view as well just incase the Conference SIDs don't match
 
 export default class SupervisorBargeCoachPlugin extends FlexPlugin {
   constructor() {

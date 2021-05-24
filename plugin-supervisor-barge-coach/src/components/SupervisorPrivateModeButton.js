@@ -36,8 +36,7 @@ class SupervisorPrivateToggle extends React.Component {
   constructor(props) {
     super(props);
   }
-  // Initial sync doc listener, will use this when calling the coachHandleClick
-  // Pull values from props as we need to confirm we are updating the agent's sync doc
+  // Initial sync doc listener, will use this when calling the privite mode toggle
   // and adding the conference, supervisor, and coaching status
   initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, coaching) {
     const docToUpdate = `syncDoc.${agentWorkerSID}`;
@@ -47,7 +46,7 @@ class SupervisorPrivateToggle extends React.Component {
     SyncDoc.updateSyncDoc(docToUpdate, conferenceSID, supervisorFN, coaching);
   }
   // We will toggle the private mode on/off based on the button click and the state
-  // of the coachingStatusPanel state along with udpating the Sync Doc appropriately
+  // of the coachingStatusPanel along with udpating the Sync Doc appropriately
   togglePrivateMode = () => {
     const coachingStatusPanel = this.props.coachingStatusPanel;
     const coaching = this.props.coaching;
@@ -60,6 +59,7 @@ class SupervisorPrivateToggle extends React.Component {
         coachingStatusPanel: false, 
       });
       // Updating the Sync Doc based on coaching status to remove supervisor
+      // The Agent will pull this back within their Sync Doc to update the UI
       this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
     } else {
       this.props.setBargeCoachStatus({ 
@@ -73,7 +73,7 @@ class SupervisorPrivateToggle extends React.Component {
     }
   }
 
-  // Render the Supervisor Private Mode Button to toggle if the supervisor wishes to remaind private when
+  // Render the Supervisor Private Mode Button to toggle if the supervisor wishes to remain private when
   // coaching the agent
   render() {
     const coachingStatusPanel = this.props.coachingStatusPanel;
@@ -96,7 +96,7 @@ class SupervisorPrivateToggle extends React.Component {
   }
 }
 
-// Mappging the agent's sid, supervisor full name, and coachingStatusPanel flag within the custom redux store/state
+// Mapping the agent's sid, supervisor full name, and coachingStatusPanel flag within the custom redux store/state
 const mapStateToProps = (state) => {
   const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
   const supervisorFN = state?.flex?.worker?.attributes?.full_name;
