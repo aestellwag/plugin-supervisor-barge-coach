@@ -17,7 +17,7 @@ Click the Monitor button to enable the Barge-In Button (Middle Button) and the C
 As of the Version 2 Update to the plugin, there has been an addition of the Coach Status Panel to the Agent's UI.  This UI change can be enabled/disabled by the below button (as of Version 2.1 of this plugin)
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-3.gif)
 
-As of the Version 2.1 Update to the plugin, there has been an addition of the Private toggle to the Supervisor's UI.  Normal mode means the agent will see who is coaching them, Private mode means that the agent will not see who is coaching them
+As of the Version 2.1 Update to the plugin, there is a private toggle to enable/disable the agent's ability to see who is coaching them
 ![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-4.gif)
 
 ## Pre-req
