@@ -42,17 +42,6 @@ class SupervisorBargeCoachButton extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  // Initial sync doc listener, will use this when calling the coachHandleClick
-  // Pull values from props as we need to confirm we are updating the agent's sync doc
-  // and adding the conference, supervisor, and coaching status
-  initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, coaching) {
-    const docToUpdate = `syncDoc.${agentWorkerSID}`;
-
-    // Updating the sync doc for the agent, this will be triggered only from coachHandleClick
-    console.log(`Updating Sync Doc: ${docToUpdate}, with conference: ${conferenceSID}, supervisor coaching: ${supervisorFN}, and coaching status to: ${coaching}`);
-    SyncDoc.updateSyncDoc(docToUpdate, conferenceSID, supervisorFN, coaching);
-  }
   
   // On click we will be pulling the conference SID and supervisorSID
   // to trigger Mute / Unmute respectively for that user - muted comes from the redux store
@@ -159,10 +148,8 @@ class SupervisorBargeCoachButton extends React.Component {
         muted: true,
         barge: false
       });
-      // Updating the Sync Doc based on coaching status
-      // Toggling Coaching to false, setting the SupervisorSID to "" as we use this
-      // to validate if there is a supervisor actively coaching them within the Agent UI
-      this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
+      // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
+      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Monitoring", "remove");
 
     } else {
       ConferenceService.enableCoaching(conferenceSID, supervisorParticipant.key, agentParticipant.key);
@@ -176,10 +163,8 @@ class SupervisorBargeCoachButton extends React.Component {
       // otherwise we will not subscribe to the Sync Doc
       const coachingStatusPanel = this.props.coachingStatusPanel;
       if (coachingStatusPanel) {
-        // Updating the Sync Doc based on coaching status
-        // Toggling Coaching to true, passing the supervisor's full name that is coaching
-        // The Agent will pull this back within their Sync Doc to update the UI
-        this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, true);
+        // Updating the Sync Doc to reflect that we are now coaching the agent
+        SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Coaching", "add");
       }
     }
   }

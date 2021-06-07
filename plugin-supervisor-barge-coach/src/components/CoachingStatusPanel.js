@@ -26,37 +26,42 @@ class CoachingStatusPanel extends React.Component {
 
   render() {
     const myWorkerSID = this.props.myWorkerSID;
-    let coachingSupervisor = this.props.coachingSupervisor;   
+    let supervisorArray = this.props.supervisorArray;   
     // Let's subscribe to the sync doc as an agent/work and check
     // if we are being coached, if we are, render that in the UI
     // otherwise leave it blank
     const mySyncDoc = `syncDoc.${myWorkerSID}`;
-    console.log(`${mySyncDoc}`);
     SyncDoc.getSyncDoc(mySyncDoc)
     .then(doc => {
-      console.log(doc.value);
       // We are subscribing to Sync Doc updates here and logging anytime that happens
       doc.on("updated", updatedDoc => {
-        console.log("Sync Doc Update Recieved: ", updatedDoc.value);
-        coachingSupervisor = doc.value.data.supervisor;
-        console.log(`Supervisor = ${coachingSupervisor}`);
-        
+        if (doc.value.data.supervisors != null) {
+          supervisorArray = [...doc.value.data.supervisors];
+        } else {
+          supervisorArray = [];
+        }
+
         // Set Supervisor's name that is coaching into props
         this.props.setBargeCoachStatus({ 
-          supervisorName: coachingSupervisor
+          supervisorArray: supervisorArray
         });
       })
     });
-    if(coachingSupervisor != "") {
+    // If the supervisor array has value in it, that means someone is coaching
+    // We will map each of the supervisors that may be actively coaching
+    // Otherwise we will not display anything if no one is actively coaching
+    if (this.props.supervisorArray.length != 0) {
       return (
-        <Status> 
-          {this.props.supervisorName != "" && 
-            <div>You are being Coached by: 
-              <h1 style={{ "color": 'green' }}>
-                {this.props.supervisorName}
-              </h1>
-            </div>
-          }
+        <Status>
+          <div>You are being Coached by: 
+            <h1 style={{ "color": 'green' }}>
+              <ol>
+                {supervisorArray.map(supervisorArray => (
+                  <li key={supervisorArray.supervisor}>{supervisorArray.supervisor}</li>
+                ))}
+              </ol>
+            </h1>
+          </div>
         </Status>
       );
     } else {
@@ -75,11 +80,11 @@ const mapStateToProps = (state) => {
   // Also pulling back the states from the redux store as we will use those later
   // to manipulate the buttons
   const customReduxStore = state?.['barge-coach'].bargecoach;
-  const supervisorName = customReduxStore.supervisorName;
+  const supervisorArray = customReduxStore.supervisorArray;
   
   return {
     myWorkerSID,
-    supervisorName,
+    supervisorArray,
   };
 };
 

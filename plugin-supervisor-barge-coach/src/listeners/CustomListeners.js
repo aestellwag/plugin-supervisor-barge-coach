@@ -27,10 +27,13 @@ Actions.addListener('afterStopMonitoringCall', (payload) => {
         enableBargeinButton: false,
         muted: true 
     }));
-    // Clearing the Sync Doc since we are done monitoring the call
+    // Capture some info so we can remove the supervisor from the Sync Doc
     const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
-    const agentSyncDoc = `syncDoc.${agentWorkerSID}`;
-    SyncDoc.clearSyncDoc(agentSyncDoc);
+    const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
+    // Sending the agentWorkerSID so we know which Sync Doc to update, the Supervisor's Full Name, and the remove status
+    // We don't care about the second or forth section in here as we are removing the Supervisor in this case
+    // Typcially we would pass in the conferenceSID and what the supervisor is doing (see SupervisorBargeCoachButton.js if you wish to see that in use)
+    SyncDoc.initSyncDoc(agentWorkerSID, "", supervisorFN, "", "remove");
 });
 
 // If coachingStatusPanel is true (enabled), proceed
@@ -53,7 +56,9 @@ if (coachingStatusPanel) {
                 }));
                 const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;;
                 const agentSyncDoc = `syncDoc.${agentWorkerSID}`;
+                // Let's clear the Sync Document and also close/end our subscription to the Document
                 SyncDoc.clearSyncDoc(agentSyncDoc);
+                SyncDoc.closeSyncDoc(agentSyncDoc);
         });    
     });
 }

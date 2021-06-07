@@ -1,12 +1,12 @@
 const ACTION_SET_BARGE_COACH_STATUS = 'SET_BARGE_COACH_STATUS';
-// Set the initial state of the below that we will use to change the buttons
+// Set the initial state of the below that we will use to change the buttons and UI
 export const initialState = {
     coaching: false,
     enableCoachButton: false,
     muted: true,
     barge: false,
     enableBargeinButton: false,
-    supervisorName: "",
+    supervisorArray: [],
     coachingStatusPanel: true
 };
 

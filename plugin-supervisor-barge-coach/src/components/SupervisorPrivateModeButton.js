@@ -36,15 +36,7 @@ class SupervisorPrivateToggle extends React.Component {
   constructor(props) {
     super(props);
   }
-  // Initial sync doc listener, will use this when calling the privite mode toggle
-  // and adding the conference, supervisor, and coaching status
-  initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, coaching) {
-    const docToUpdate = `syncDoc.${agentWorkerSID}`;
-
-    // Updating the sync doc for the agent, this will be triggered only from coachHandleClick
-    console.log(`Updating Sync Doc: ${docToUpdate}, with conference: ${conferenceSID}, supervisor coaching: ${supervisorFN}, and coaching status to: ${coaching}`);
-    SyncDoc.updateSyncDoc(docToUpdate, conferenceSID, supervisorFN, coaching);
-  }
+  
   // We will toggle the private mode on/off based on the button click and the state
   // of the coachingStatusPanel along with udpating the Sync Doc appropriately
   togglePrivateMode = () => {
@@ -58,9 +50,8 @@ class SupervisorPrivateToggle extends React.Component {
       this.props.setBargeCoachStatus({ 
         coachingStatusPanel: false, 
       });
-      // Updating the Sync Doc based on coaching status to remove supervisor
-      // The Agent will pull this back within their Sync Doc to update the UI
-      this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, "", false);
+      // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
+      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Monitoring", "remove");
     } else {
       this.props.setBargeCoachStatus({ 
         coachingStatusPanel: true, 
@@ -68,7 +59,8 @@ class SupervisorPrivateToggle extends React.Component {
       // Updating the Sync Doc based on coaching status only if coaching is true
       // The Agent will pull this back within their Sync Doc to update the UI
       if(coaching) {
-        this.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, true);
+        // Updating the Sync Doc to reflect that we are now coaching the agent
+        SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Coaching", "add");
       }
     }
   }
@@ -118,8 +110,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-// Mapping dispatch to props as I will leverage the setAgentAssistanceStatus
-// to change the properties on the redux store, referenced above with this.props.setAgentAssistanceStatus
+// Mapping dispatch to props as I will leverage the setBargeCoachStatus
+// to change the properties on the redux store, referenced above with this.props.setBargeCoachStatus
 const mapDispatchToProps = (dispatch) => ({
   setBargeCoachStatus: bindActionCreators(BargeCoachStatusAction.setBargeCoachStatus, dispatch),
 });

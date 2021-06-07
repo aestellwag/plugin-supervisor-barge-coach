@@ -143,6 +143,13 @@ You are all set to test the Supervisor Barge/Coach features on your Flex instanc
 
 ## Changelog
 
+### 2.2.0
+
+**June 7, 2021**
+
+- Updated Sync Doc with an array of Supervisors, coaching panel now supports an array of supervisors if multiple are coaching at the same time
+- Optimized initSync function
+
 ### 2.1.0
 
 **May 24, 2021**
