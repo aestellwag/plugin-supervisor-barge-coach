@@ -35,30 +35,6 @@ function tokenUpdateHandler() {
 
   SYNC_CLIENT.updateToken(accessToken);
 }
-/*
-FIXME:  Great updates today, we now have the Sync Doc as an array so multiple supervisors can coach at the same time and it will display properly for the agent.  
-        We've also changed it to say "is coaching" or "is monitoring.  We could use this to enhance what the agent sees, however, I will keep it at coaching for now.
-        Next thing to work on is enhancement two.  With the addition of "is coaching" and "is Monitoring" we should be able to have the supervisor subscribe to the Sync Doc
-        If they click the task (before they monitor the call) have it subscribe to updates and display IF a supervisor is actively engaged (IE monitoring, coaching or barged)
-        We should be able to steal the way we map this within the CoachingStatusPanel Render (line 59 in CoachingStatusPanel.js)
-
-        I shifted the initSync to the Sync doc finally, which is good.  Now that I have an array, I need when they unmonitor to follow the same process when they click the uncoach button
-
-TODO:
-      
-      1 - Test if multiple Supervisors begin to monitor/coach and agent, what happens
-        - Need to convert the Supervisor to an array, possibly add the monitor/coach/barge as a status, something like Supervisor is Montoring, Supervisor is Coaching, Supervisor has Joined the call
-      (COMPLETED)
-        1a - Now that the above is working, we need to remove the specific supervisor from the array when they unmonitor the call
-        (COMPLETED)
-      2 - Enhancement is to add who is monitoring/coaching/barged to the Supervisor Monitor Canvas so when an additional Supervisor is looking to do this, they can see
-          who might be doing it as well.  Display the Name of the Supervisor and what they are actively doing (Andrew Stellwag is Monitoring, Andrew Stellwag is Coaching, etc..)
-      3 - It looks like the reducer has a bug; the default action-type handler is supposed to return the initialState but it returns the current state unchanged.
-      4 - Noticed sluggishness might reboot computer and test again, could be a none-issue
-
-*/
-
-
 
 export default class SupervisorBargeCoachPlugin extends FlexPlugin {
   constructor() {
