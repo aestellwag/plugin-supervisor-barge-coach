@@ -25,7 +25,7 @@ export function reduce(state = initialState, action) {
                 ...action.status
             }
         }
-        // If they unmonitor, we want to go back to the initial state
+        // Default case if it doesn't meet the above action
         default:
             return state;
     }

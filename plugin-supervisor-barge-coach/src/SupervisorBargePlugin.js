@@ -11,6 +11,7 @@ import { SyncDoc } from './services/Sync'
 import SupervisorBargeCoachButton from './components/SupervisorBargeCoachButton'; 
 import CoachingStatusPanel from './components/CoachingStatusPanel';
 import SupervisorPrivateToggle from './components/SupervisorPrivateModeButton';
+import SupervisorMonitorPanel from './components/SupervisorMonitorPanel';
 
 // import the reducers
 import reducers, { namespace } from './states';
@@ -56,6 +57,8 @@ export default class SupervisorBargeCoachPlugin extends FlexPlugin {
     flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
     // Add the Supervisor Private Mode Toggle
     flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
+    // Add the Supervisor Monitor Panel
+    flex.Supervisor.TaskCanvasTabs.Content.add(<SupervisorMonitorPanel title= "Supervisors Engaged" icon="Supervisor" key="supervisoronitorpanel" />);
     
     // Adding Coaching Status Panel to notify the agent who is Coaching them
     flex.CallCanvas.Content.add(
