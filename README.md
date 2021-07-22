@@ -1,39 +1,40 @@
-<a  href="https://www.twilio.com">
-<img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
+<a href="https://www.twilio.com">
+<img src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg" alt="Twilio" width="250" />
 </a>
 
 # Twilio Flex Plugin - Supervisor Barge-In and Coach
 
 Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
 
-This plugin adds a barge-in and coach button to the Monitor call canvas.  You can get to this via the Team View, click on the agent you wish to monitor and the buttons will be available once you begin to monitor the live calls.  The left button is the Barge-In button which allows you to join the conference all with the agent(s) and customer(s).  Toggling this button will mute/unmute yourself.  The right button is the Coach button which allows you to talk to the agent you are monitoring.  The no other member of the call will be able to hear you except for the monitored agent.  Toggling this button enables Coach and the left button converts to a Mute/Un-Mute button for the coaching mode.
+This plugin adds a barge-in and coach button to the Monitor call canvas. You can get to this via the Team View, click on the agent you wish to monitor and the buttons will be available once you begin to monitor the live calls.  The left button is the Barge-In button which allows you to join the conference all with the agent(s) and customer(s).  Toggling this button will mute/unmute yourself.  The right button is the Coach button which allows you to talk to the agent you are monitoring.  The no other member of the call will be able to hear you except for the monitored agent.  Toggling this button enables Coach and the left button converts to a Mute/Un-Mute button for the coaching mode.
 
 First select the call/worker you wish to monitor  
-![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-1.gif)
+![Plugin Demo](https://github.com/twilio-professional-services/plugin-supervisor-barge-coach/blob/main/resources/Supervisor-Barge-Coach-Plugin-1.gif)
 
 Click the Monitor button to enable the Barge-In Button (Middle Button) and the Coach Button (Right Button)  
-![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-2.gif)
+![Plugin Demo](https://github.com/twilio-professional-services/plugin-supervisor-barge-coach/blob/main/resources/Supervisor-Barge-Coach-Plugin-2.gif)
 
 As of the Version 2 Update to the plugin, there has been an addition of the Coach Status Panel to the Agent's UI.  This UI change can be enabled/disabled by the below button (as of Version 2.1 of this plugin)  
-![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-3.gif)
+![Plugin Demo](https://github.com/twilio-professional-services/plugin-supervisor-barge-coach/blob/main/resources/Supervisor-Barge-Coach-Plugin-3.gif)
 
 As of the Version 2.1 Update to the plugin, there is a private toggle to enable/disable the agent's ability to see who is coaching them  
-![Plugin Demo](https://github.com/aestellwag/plugin-supervisor-barge-coach/blob/main/Supervisor-Barge-Coach-Plugin-4.gif)
+![Plugin Demo](https://github.com/twilio-professional-services/plugin-supervisor-barge-coach/blob/main/resources/Supervisor-Barge-Coach-Plugin-4.gif)
 
-## Pre-req
+## Requirement
 
 To deploy this plugin, you will need:
 
 - An active Twilio account with Flex provisioned. Refer to the [Flex Quickstart](https://www.twilio.com/docs/flex/quickstart/flex-basics#sign-up-for-or-sign-in-to-twilio-and-create-a-new-flex-project") to create one.
 - npm version 5.0.0 or later installed (type `npm -v` in your terminal to check)
-- Node.js version 10.12.0 or later installed (type `node -v` in your terminal to check)
+- Node.js version 12 or later installed (type `node -v` in your terminal to check)
 - [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart#install-twilio-cli) along with the [Flex CLI Plugin](https://www.twilio.com/docs/twilio-cli/plugins#available-plugins) and the [Serverless Plugin](https://www.twilio.com/docs/twilio-cli/plugins#available-plugins). Run the following commands to install them:
-  ```
+  
+  ```bash
   # Install the Twilio CLI
   npm install twilio-cli -g
   # Install the Serverless and Flex as Plugins
   twilio plugins:install @twilio-labs/plugin-serverless
-  twilio plugins:install @twilio-labs/plugin-flex@beta
+  twilio plugins:install @twilio-labs/plugin-flex
   ```
 - A GitHub account
 
@@ -52,72 +53,62 @@ all the config values we need to run this Flex plugin:
 
 Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
 
-Navigate to the primary plugin folder and run NPM install for the plugin
-```bash
-cd plugin-supervisor-barge-coach
-npm install
-```
+1. Clone this repo:
 
-Navigate to the serverless folder, create and modify the .env file
-```bash
-cd ..
-cd serverless
-***rename the .env.example file to .env and change the below:
-ACCOUNT_SID= Found at https://www.twilio.com/console
-AUTH_TOKEN= Found at https://www.twilio.com/console 
-TWILIO_WORKSPACE_SID = WSXXXXXXXXXXXXXXXXXX
-```
+  ```bash
+  https://github.com/twilio-professional-services/plugin-supervisor-barge-coach
+  ```
 
-Run NPM install for the serverless functions
-```bash
-Run: (from the serverless directory)
-npm install
-```
+2. Install the dependencies
 
-Install the twilio plugin-serverless
-```bash
-Run: 
-twilio plugins:install @twilio-labs/plugin-serverless
-```
+  ```bash
+  # Install the dependencies of the Flex Plugin
+  npm install
+  
+  # Install the dependencies of the Twilio Functions
+  cd functions
+  npm install
+  ```
 
-Deploy the serverless functions into Twilio
-*Do this if you haven't deployed the serverless functions already*
-```bash
-Run: 
-twilio serverless:deploy
-```
-Copy the domain as you'll need this for the .env in the next step
+3. Copy the `.env.example` file in the `functions/` directory:
 
+  ```bash
+  cp functions/.env.example functions/.env
+  ```
 
-From the root plugin directory rename the .env.example file to .env and change the below:
-```bash
-cd ..
-cd plugin-supervisor-barge-coach
+4. Edit `.env`:
 
-var REACT_APP_SERVICE_BASE_URL = 
-Points to the Twilio Function Service URL (example: https://barge-coach-XXXX-dev.twil.io)
+  ```bash
+  ACCOUNT_SID= Found at https://www.twilio.com/console
+  AUTH_TOKEN= Found at https://www.twilio.com/console 
+  TWILIO_WORKSPACE_SID = WSXXXXXXXXXXXXXXXXXX
+  ```
 
-Can be found by by going to https://www.twilio.com/console/functions/overview/services then click on barge-coach (should look like barge-coach-XXXX-dev.twil.io)
+5. Copy the `.env.example` file in the root directory:
 
-var REACT_APP_TASK-CHANNEL_SID =
-Points to Voice Channel SID - Can be found by going to https://www.twilio.com/console/taskrouter/dashboard > click on Workspaces > then Task Channels
-```
+  ```bash
+  cp .env.example .env
+  ```
 
-From the public folder, create the appConfig.js and change on variable within it
-```bash
-cd public
-rename appConfig.example.js to appConfig.js
+6. In a future step, once you have deployed your code, you'll get a domain for your Twilio Functions. Copy this and set the `REACT_APP_SERVICE_BASE_URL` in the `.env` file.
 
-change serviceBaseUrl: "https://barge-coach-XXXX.twil.io"
-```
+7. Copy the `public/appConfig.example.js` over:
+
+  ```bash
+  copy public/appConfig.example.js public/appConfig.js
+  ```
 
 ## Development
 
 In order to develop locally, you can use the Webpack Dev Server by running (from the root plugin directory):
 
-```bash
-Twilio flex:plugins:start
-```
+  ```bash
+  # Start Flex Plugins
+  twilio flex:plugins:start
+  
+  # Start Twilio Functions
+  cd functions && npm run start 
+  ```
 
 This will automatically start up the Webpack Dev Server and open the browser for you. Your app will run on `http://localhost:3000`. If you want to change that you can do this by setting the `PORT` environment variable:
 
@@ -125,11 +116,20 @@ When you make changes to your code, the browser window will be automatically ref
 
 ## Deploy
 
-When you are ready to deploy your plugin, in your terminal run:
+When you are ready to deploy your plugin, first deploy your Twilio Functions:
+
+```bash
+twilio serverless:deploy
 ```
-Run: 
+
+*Note: Don't forget to copy over the domain to the root level .env - this only needs to be done once*
+
+Then deploy your Flex Plugins
+
+```bash
 twilio flex:plugins:deploy --major --changelog "Notes for this version" --description "Functionality of the plugin"
 ```
+
 For more details on deploying your plugin, refer to the [deploying your plugin guide](https://www.twilio.com/docs/flex/plugins#deploying-your-plugin).
 
 ## View your plugin in the Plugins Dashboard
@@ -137,7 +137,6 @@ For more details on deploying your plugin, refer to the [deploying your plugin g
 After running the suggested next step with a meaningful name and description, navigate to the [Plugins Dashboard](https://flex.twilio.com/admin/) to review your recently deployed and released plugin. Confirm that the latest version is enabled for your contact center.
 
 You are all set to test the Supervisor Barge/Coach features on your Flex instance!
-
 
 ---
 
