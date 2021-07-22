@@ -60,6 +60,7 @@ typings/
 
 # next.js build output
 .next
+.idea
 
 # Flex-related ignore
 appConfig.js
