@@ -20,7 +20,7 @@ As of the Version 2 Update to the plugin, there has been an addition of the Coac
 As of the Version 2.1 Update to the plugin, there is a private toggle to enable/disable the agent's ability to see who is coaching them  
 ![Plugin Demo](https://github.com/twilio-professional-services/plugin-supervisor-barge-coach/blob/main/resources/Supervisor-Barge-Coach-Plugin-4.gif)
 
-## Requirement
+## Requirements
 
 To deploy this plugin, you will need:
 
