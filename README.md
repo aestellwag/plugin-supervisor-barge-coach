@@ -95,7 +95,7 @@ Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmj
 7. Copy the `public/appConfig.example.js` over:
 
   ```bash
-  copy public/appConfig.example.js public/appConfig.js
+  cp public/appConfig.example.js public/appConfig.js
   ```
 
 ## Development
