@@ -68,4 +68,4 @@ pluginsService.js
 build/
 
 # CLI-related ignore
-serverless/.twiliodeployinfo
+functions/.twiliodeployinfo
